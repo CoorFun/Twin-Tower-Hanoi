@@ -10,7 +10,7 @@ void swap (N, A, B) {
 }
 
 void consolidate (n, src, dst) {
-	if n == 1 {
+	if (n == 1) {
 		move (1, src, dst);
 	} else {
 		consolidate (n - 1, src, dst); /* head recursion */
@@ -21,7 +21,7 @@ void consolidate (n, src, dst) {
 }
 
 void distribute (n, src, dst) {
-	if n == 1 {
+	if (n == 1) {
 		move (1, src, dst);
 	} else {
 		double_hanoi (n - 1, src, tmp);
