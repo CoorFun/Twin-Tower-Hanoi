@@ -3,8 +3,8 @@ This an assembly language project which to represent a algorithm to solve a Twin
 
 # Developping Diary
 
-## 2017, 3, 16
-
+## 2017, 3, 21
+总结出了双塔步骤
 
 ## 2017, 3, 15
 法语课考试了，没有进展
