@@ -33,6 +33,11 @@ void distribute (n, src, dst) {
 
 /* move n pairs from src to dst */
 void double_hanoi (n, src, dst) {
+	if (n == 1)
+	{
+		move (1, src, dst);
+		move (1, src, dst);
+	}
 	double_hanoi (n - 1, src, tmp); /* tmp = spare pile */
 	move (1, src, dst);
 	move (1, src, dst);
