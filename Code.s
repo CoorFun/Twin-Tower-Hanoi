@@ -93,8 +93,73 @@ main:       addi    r5, r0, 0       # src = A
 # 
 # OUTPUT: 	----
 #===================================================================
-# swap(A, B, C)
+# swap(A, B, C) 					//// N, A, B, C
 swap:		addi	r27, r27, -40
+			stw		r31,  0(r27)	# save return address
+			stw		r3,   4(r27)
+			stw		r4,   8(r27)	# N
+			stw		r5,  12(r27)	# A
+			stw		r6,  16(r27)	# B
+			stw		r7,  20(r27)	# C
+			stw		r8,  24(r27)
+			stw		r9,  28(r27)
+			stw		r10, 32(r27)	
+
+# consolidate(N-1, B, A) 			////  N-1, B, A, C
+			addi	r4, r4, -1		# n = n - 1
+			ldw		r5, 16(r27) 	# acquire the new parameter order
+			ldw 	r6, 12(r27)
+			ldw 	r7, 20(r27)
+			call 	cons
+
+# move(B, C) 						////  --, B, C, A
+			ldw 	r5, 16(r27)
+			ldw 	r6, 20(r27)
+			ldw 	r7, 12(r27)
+
+			call 	move
+
+# double_hanoi(N-1, B, A) 			//// N-1, B, A, C
+			ldw 	r4, 8(r27)		# load n
+			addi 	r4, r4, -1 		# n = n -1 
+			ldw 	r5, 16(r27)
+			ldw 	r6, 12(r27)
+			ldw 	r7, 20(r27)
+
+			call 	dhan
+
+# move(A, B) 						//// --, A, B, C
+			ldw 	r5, 12(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 20(r27)
+
+			call 	move
+
+# double_hanoi(N-1, C, B)			//// N-1, C, B, A
+			ldw 	r4, 8(r27)		# load n
+			addi 	r4, r4, -1 		# n = n -1 
+			ldw		r5, 20(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 12(r27)
+
+			call 	dhan	
+
+# distribute(N-1, B, A)				//// N-1, B, A, C
+			ldw 	r4, 8(r27)
+			addi 	r4, r4, -1 		# n = n -1 
+			ldw 	r5, 16(r27)
+			ldw 	r6, 12(r27)
+			ldw 	r7, 20(r27)
+
+			call 	dsrb	
+
+			br 		fin
+#============= Consolidate prodruce Start ==========================
+# INPUT: 	n(r4), src(r5), dst(r6), temp(r7)
+# 
+# OUTPUT: 	----
+#===================================================================
+cons:		addi	r27, r27, -40
 			stw		r31,  0(r27)	# save return address
 			stw		r3,   4(r27)
 			stw		r4,   8(r27)
@@ -103,67 +168,9 @@ swap:		addi	r27, r27, -40
 			stw		r7,  20(r27)
 			stw		r8,  24(r27)
 			stw		r9,  28(r27)
-			stw		r10, 32(r27)	
+			stw		r10, 32(r27)
 
-# consolidate(N-1, B, A)
-			addi	r4, r4, -1		# n = n - 1
-			add 	r23, r5, r0		#switch parameters
-			add 	r5, r6, r0
-			add 	r6, r23, r0
-			call 	cons
-
-# move(B, C)
-			add 	r23, r5, r0 	
-			add 	r5, r6, r0
-			add 	r6, r23, r0
-
-			add 	r23, r6, r0
-			add 	r6, r7, r0
-			add 	r7, r23, r0
-
-			call 	move
-
-# double_hanoi(N-1, B, A)
-			addi 	r4, r4, -1 		# n = n -1 
-			add 	r23, r6, r0 	# switch parameters
-			add 	r6, r7, r0
-			add 	r7, r23, r0
-
-			call 	dhan
-
-# move(A, B)
-			add 	r23, r5, r0
-			add 	r5, r6, r0
-			add 	r6, r23, r0
-
-			call 	move
-
-# double_hanoi(N-1, C, B)
-			addi 	r4, r4, -1 		# n = n -1 
-			add 	r23, r5, r0 	# switch parameters
-			add 	r5, r7, r0
-			add 	r7, r23, r0
-
-			call 	dhan	
-
-# distribute(N-1, B, A)
-			addi 	r4, r4, -1 		# n = n -1 
-			add 	r23, r5, r0 	# switch parameters
-			add 	r5, r6, r0
-			add 	r6, r23, r0
-
-			add 	r23, r6, r0
-			add 	r6, r7, r0
-			add 	r7, r23, r0
-
-			call 	dsrb	
-
-#============= Consolidate prodruce Start ==========================
-# INPUT: 	n(r4), src(r5), dst(r6), temp(r7)
-# 
-# OUTPUT: 	----
-#===================================================================
-cons:
+			beq 	r4, r24, con1	# if n = 1
 
 #============= Double Hanoi prodruce Start =========================
 # INPUT: 	n(r4), src(r5), dst(r6), temp(r7)
@@ -179,6 +186,8 @@ dhan:
 #===================================================================
 dsrb:
 
+# when n get 1
+con1: 		call  	move 
 # fin
 
 fin:		ldw		r10, 32(r27)
