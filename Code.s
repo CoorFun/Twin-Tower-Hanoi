@@ -162,23 +162,99 @@ swap:		addi	r27, r27, -40
 cons:		addi	r27, r27, -40
 			stw		r31,  0(r27)	# save return address
 			stw		r3,   4(r27)
-			stw		r4,   8(r27)
-			stw		r5,  12(r27)
-			stw		r6,  16(r27)
-			stw		r7,  20(r27)
+			stw		r4,   8(r27)	# N
+			stw		r5,  12(r27)	# A
+			stw		r6,  16(r27)	# B
+			stw		r7,  20(r27)	# C
 			stw		r8,  24(r27)
 			stw		r9,  28(r27)
 			stw		r10, 32(r27)
 
 			beq 	r4, r24, con1	# if n = 1
 
+# consolidate(N-1, src, dst,temp)	//// N-1, src, dst, temp
+			ldw 	r4, 8(r27)		# load n
+			addi 	r4, r4, -1		# n = n-1
+			ldw		r5, 12(r27)
+			ldw 	r6, 16(r27)
+			ldw		r7, 20(r27)
+
+			call 	cons
+
+# double_hanoi(N-1, dst, temp, src)	//// N-1, dst, temp, src
+			ldw 	r4, 8(r27)		# load n
+			addi 	r4, r4, -1		# n = n-1
+			ldw 	r5, 16(r27)
+			ldw 	r6, 20(r27)
+			ldw 	r7, 12(r27)
+
+			call 	dhan
+
+# move(src, dst) 						//// --, A, B, C
+			ldw 	r5, 12(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 20(r27)
+
+			call 	move
+
+# double_hanoi(N-1, temp, dst)			//// N-1, temp, dst, src
+			ldw 	r4, 8(r27)
+			addi 	r4, r4, -1
+			ldw 	r5, 20(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 12(r27)
+
+			call 	dhan
+
+			br 		fin
 #============= Double Hanoi prodruce Start =========================
 # INPUT: 	n(r4), src(r5), dst(r6), temp(r7)
 # 
 # OUTPUT: 	----
 #===================================================================
-dhan:
+dhan:		addi	r27, r27, -40
+			stw		r31,  0(r27)	# save return address
+			stw		r3,   4(r27)
+			stw		r4,   8(r27)	# N
+			stw		r5,  12(r27)	# A
+			stw		r6,  16(r27)	# B
+			stw		r7,  20(r27)	# C
+			stw		r8,  24(r27)
+			stw		r9,  28(r27)
+			stw		r10, 32(r27)
 
+			beq 	r4, r24, con2	# if n = 1, move 2 times
+
+# double_hanoi(N-1, src, temp, dst)
+			ldw 	r4, 8(r27)
+			addi 	r4, r4, -1
+			ldw 	r5, 12(r27)
+			ldw 	r6, 20(r27)
+			ldw 	r7, 16(r27)
+
+			call 	dhan
+# move(src, dst)
+			ldw 	r5, 12(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 20(r27)
+
+			call  	move
+# move(src, dst)
+			ldw 	r5, 12(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 20(r27)
+
+			call  	move
+# double_hanoi(N-1, temp, dst, src)
+			ldw 	r4, 8(r27)
+			addi 	r4, r4, -1
+			ldw 	r5, 20(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 12(r27)
+
+			call 	dhan
+
+			br 		fin
 #============= Distribute prodruce Start ===========================
 # INPUT: 	n(r4), src(r5), dst(r6), temp(r7)
 # 
@@ -186,8 +262,17 @@ dhan:
 #===================================================================
 dsrb:
 
+con2: 		ldw 	r5, 12(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 20(r27)
+
+			call  	move
 # when n get 1
-con1: 		call  	move 
+con1: 		ldw 	r5, 12(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 20(r27)
+
+			call  	move 
 # fin
 
 fin:		ldw		r10, 32(r27)
