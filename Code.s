@@ -260,8 +260,55 @@ dhan:		addi	r27, r27, -40
 # 
 # OUTPUT: 	----
 #===================================================================
-dsrb:
+dsrb:		addi	r27, r27, -40
+			stw		r31,  0(r27)	# save return address
+			stw		r3,   4(r27)
+			stw		r4,   8(r27)	# N
+			stw		r5,  12(r27)	# A
+			stw		r6,  16(r27)	# B
+			stw		r7,  20(r27)	# C
+			stw		r8,  24(r27)
+			stw		r9,  28(r27)
+			stw		r10, 32(r27)
 
+			beq 	r4, r24, con1	# if n = 1
+
+# double_hanoi(N-1, src, temp, dst)
+			ldw 	r4, 8(r27)
+			addi 	r4, r4, -1
+			ldw 	r5, 12(r27)
+			ldw 	r6, 20(r27)
+			ldw 	r7, 16(r27)
+
+			call 	dhan
+# move(src, dst)
+			ldw 	r5, 12(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 20(r27)
+
+			call  	move
+# double_hanoi(N-1, temp, src, dst)
+			ldw 	r4, 8(r27)
+			addi 	r4, r4, -1
+			ldw 	r5, 20(r27)
+			ldw 	r6, 12(r27)
+			ldw 	r7, 16(r27)
+
+			call 	dhan
+# distribute(N-1, src, dst)
+			ldw 	r4, 8(r27)
+			addi 	r4, r4, -1
+			ldw 	r5, 12(r27)
+			ldw 	r6, 16(r27)
+			ldw 	r7, 20(r27)
+
+			call  	dsrb
+
+			br 		fin
+#============= Condition section Start =============================
+#	con2 -> double move
+# 	con1 -> single mvoe
+#===================================================================
 con2: 		ldw 	r5, 12(r27)
 			ldw 	r6, 16(r27)
 			ldw 	r7, 20(r27)
