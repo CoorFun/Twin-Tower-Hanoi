@@ -18,9 +18,9 @@
 #============= Sec_1/B : SIMNIOS2 ==============================
 #-- define towers (16 words) in data section
 #-- 			.data
-TowerA:		.skip	16*4				# use TowerA to dump stack in debug window
-TowerB:		.skip	16*4
-TowerC:		.skip	16*4
+#--TowerA:		.skip	16*4				# use TowerA to dump stack in debug window
+#--TowerB:		.skip	16*4
+#--TowerC:		.skip	16*4
 #-- 
 #-- 		.extern		Graphic_MovePalet	# for Hardware test
 #-- 		.global		HanoiTwinTower		# called by Hardware tester
@@ -38,7 +38,7 @@ START:
             xor     r2, r2, r2
             addi    r4, r0, 7       # n = 7
 			call	HanoiTwinTower
-			trap					# replace by "Trap" for SIMNIOS2
+			stop					# replace by "Trap" for SIMNIOS2
 
 #------------------Function called by Hardware tester
 HanoiTwinTower:
@@ -399,4 +399,4 @@ done:		addi    r3, r3, 1      	# increment no. of steps
 # move error
 
 error:      addi    r2, r0, -1
-			trap					# replace by "Trap" for SIMNIOS2
+			stop					# replace by "Trap" for SIMNIOS2
