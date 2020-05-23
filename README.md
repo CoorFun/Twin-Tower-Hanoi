@@ -9,7 +9,7 @@ The Tower of Hanoi is a mathematical game for moving a set of N disks stacked in
  1. Initially, there are 2 piles of dishes, each pile with different colors but with the same number of disks of matching sizes.
  2. The goal of the game is to swap the dishes in one stack with the dishes in the other stack as shown below
 
-![img](https://github.com/CoorFun/twin-tower-hanoi-game-in-asm/edit/master/img.png)
+![img](img.png)
 
 # Report of my solution
 
