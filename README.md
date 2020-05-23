@@ -1,8 +1,21 @@
-# twin-tower-hanoi game
+# twin-tower-hanoi-game-in-asm
+
+This repo contains an assembly code solution for solving the Tower of Hanoi puzzle
+
+### What's the twin-tower-hanoi game?
+
+The Tower of Hanoi is a mathematical game for moving a set of N disks stacked in the order of decreasing size from one pile to another (using a spare pile) one disk at a time without ever placing a larger disk on top of a smaller disk. The Twin Tower of Hanoi (or Bicolor Tower of Hanoi) is derived from the Tower of Hanoi with the following modifications:
+ 
+ 1. Initially, there are 2 piles of dishes, each pile with different colors but with the same number of disks of matching sizes.
+ 2. The goal of the game is to swap the dishes in one stack with the dishes in the other stack as shown below
+
+![img](https://github.com/CoorFun/twin-tower-hanoi-game-in-asm/edit/master/img.png)
+
+# Report of my solution
 
 ### Introduction
 
-The main propose of this project is to achieve a set of assembly instructions which can solve the Twin-Tower-Hanoi Game. This report mainly talk about how I step by step finished the code and the main issues I found during the project running. Finally I will propose my conclusion and feelings about this project.
+The main propose of this project is to achieve a set of assembly instructions which can solve the twin-tower-hanoi game. This report mainly talk about how I step by step finished the code and the main issues I found during the project running. Finally I will propose my conclusion and feelings about this project.
 
 ### Way to Learn
 
